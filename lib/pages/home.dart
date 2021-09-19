@@ -8,6 +8,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  late String _userTodo;
   List todoList = [];
 
   @override
@@ -21,7 +23,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.cyanAccent,
       appBar: AppBar(
-        title: Text('Список дел'),
+        title: Text('Todo list'),
         centerTitle: true,
       ),
       body: ListView.builder(
@@ -53,6 +55,32 @@ class _HomeState extends State<Home> {
               },
             );
           }),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Add Element'),
+                  content: TextField(
+                    onChanged:(String value){
+                      _userTodo=value;
+                    },
+                  ),
+                  actions: [
+                    ElevatedButton(onPressed: (){
+                      setState(() {
+                        todoList.add(_userTodo);
+                      });
+                      Navigator.of(context).pop();
+                    }, child: Text('Add'))
+                  ],
+                );
+              });
+        },
+        child: Icon(Icons.add_circle, color: Colors.indigo),
+      ),
     );
   }
 }
