@@ -8,7 +8,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   late String _userTodo;
   List todoList = [];
 
@@ -18,6 +17,25 @@ class _HomeState extends State<Home> {
     todoList.addAll(['Buy milk', 'Wash dishes']);
   }
 
+  void _menuOpen() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(' Menu'),
+        ),
+        body: Row(
+          children: [
+            ElevatedButton(onPressed: (){
+              Navigator.pop(context);
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+            }, child: Text('To Main'))
+          ],
+        )
+      );
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +43,12 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text('Todo list'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: _menuOpen,
+          )
+        ],
       ),
       body: ListView.builder(
           itemCount: todoList.length,
@@ -64,17 +88,19 @@ class _HomeState extends State<Home> {
                 return AlertDialog(
                   title: Text('Add Element'),
                   content: TextField(
-                    onChanged:(String value){
-                      _userTodo=value;
+                    onChanged: (String value) {
+                      _userTodo = value;
                     },
                   ),
                   actions: [
-                    ElevatedButton(onPressed: (){
-                      setState(() {
-                        todoList.add(_userTodo);
-                      });
-                      Navigator.of(context).pop();
-                    }, child: Text('Add'))
+                    ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            todoList.add(_userTodo);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Add'))
                   ],
                 );
               });
